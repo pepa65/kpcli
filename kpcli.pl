@@ -5549,8 +5549,9 @@ this program would not have been practical for me to author.
 								     preventing blank lines between paragraphs.
 								    Fixed a typo in the --help info for --pwfile.
 								    Fixed a small bug in subroutine destroy_found().
- 2019-Jul-26 v3.2a  [pepa65] Refactored color
-                    Added aliases: search=find
+ 2019-Jul-26 v3.2a  Cloned to https://github.com/pepa65/kpcli
+                    Refactored color
+                    Added alias: search=find
                     Changed defaults on list/show after found
 
 =head1 TODO ITEMS

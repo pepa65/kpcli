@@ -320,6 +320,10 @@ CHANGELOG
                             preventing blank lines between paragraphs.
                            Fixed a typo in the --help info for --pwfile.
                            Fixed a small bug in subroutine destroy_found().
+        2019-Jul-26 v3.2a  Cloned to https://github.com/pepa65/kpcli
+                           Refactored color
+                           Added alias: search=find
+                           Changed defaults on list/show after found
 
 TODO ITEMS
          Consider broadening shell_expansion support beyond just mv and ls.
