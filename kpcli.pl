@@ -414,7 +414,7 @@ my $term = new Term::ShellUI(
 					 "yet been run.\n" .
 					 "\n" .
 					 "By default, passwords are \"hidden\" by being displayed as\n" .
-					 "\"white on white\" where they can be copied to the clip board\n".#PP
+					 "\"$PW\" where they can be copied to the clip board\n".
 					 "but not seen. Provide the -f option to show passwords.\n" .
 					 "Use the -a option to see create and modified times, and\n" .
 					 "the index of the icon set for the entry.\n",
@@ -509,6 +509,7 @@ my $term = new Term::ShellUI(
 				args => "<search string>",
 				method => \&cli_find,
 			},
+			"search" => { alias => "find", },
 			"purge" => {
 				desc => "Purges entries in a given group base on criteria.",
 				doc => "\n" .
@@ -1566,10 +1567,10 @@ sub cli_find($) {
 
 	# If we only found one, ask the user if they want to see it
 	if (scalar(@matches) == 1) {
-		print "Would you like to show this entry? [y/N] ";
+		print "Would you like to show this entry? [Y/n] ";
 		my $key=get_single_key();
 		print "\n";
-		if (lc($key) eq 'y') {
+		if (lc($key) ne 'n') {
 			my $search_params = { 'group_id =' => $found_gid };
 			my ($e,@empty) = $k->find_entries($search_params);
 			my $full_path="/$FOUND_DIR/".$e->{title};
@@ -5548,7 +5549,9 @@ this program would not have been practical for me to author.
 								     preventing blank lines between paragraphs.
 								    Fixed a typo in the --help info for --pwfile.
 								    Fixed a small bug in subroutine destroy_found().
- 2019-Jul-26 v3.2a  Refactored color
+ 2019-Jul-26 v3.2a  [pepa65] Refactored color
+                    Added aliases: search=find
+                    Changed defaults on list/show after found
 
 =head1 TODO ITEMS
 
