@@ -555,6 +555,7 @@ if (length($opts->{kdb})) {
 	my $err = open_kdb($opts->{kdb},$opts->{key}); # Sets $state->{'kdb'}
 	if (length($err)) {
 		print $ERR."Error opening file: $err\n".$CLR;
+		new_kdb($state);
 	}
 } else {
 	new_kdb($state);
@@ -3635,8 +3636,9 @@ sub new_kdb {
 	#$state->{kdb_ver} = $state->{kdb}->{header}->{version}; # undef after ->new()
 	$state->{kdb_ver} = 1; # Only provide 1.x (*.kdb) features by default
 	# To be compatible with KeePassX
-	$state->{'kdb'}->add_group({ title => 'eMail' });
-	$state->{'kdb'}->add_group({ title => 'Internet' });
+	#$state->{'kdb'}->add_group({ title => 'eMail' });
+	#$state->{'kdb'}->add_group({ title => 'Internet' });
+	$state->{'kdb'}->add_group({ title => 'Root' });
 	refresh_state_all_paths();
 	if (-f $state->{placed_lock_file}) { unlink($state->{placed_lock_file}); }
 	delete($state->{placed_lock_file});
@@ -4592,25 +4594,25 @@ sub composite_master_pass($$) {
 		# the code to the end of this if block should be removed. It allowed
 		# support for key files for *.kdb files before File::KeePass supported
 		# that natively. File::KeePass now also supports that for *.kdbx.
-		open(my $fh,'<',$key_file) || die "Couldn't open key file $key_file: $!\n";
-		my $size = -s $key_file;
-		read($fh,my $buffer,$size);
-		close $fh;
-		if (length($buffer) != $size) {
-			die "Couldn't read entire key file contents of $key_file.\n";
-		}
-
-		$pass = substr(sha256($pass),0,32);
-		if ($size == 32) {
-			$pass .= $buffer;
-		} elsif ($size == 64) {
-			for (my $i = 0; $i < 64; $i += 2) {
-				$pass .= chr(hex(substr($buffer,$i,2)));
-			}
-		} else {
-			$pass .= substr(sha256($buffer),0,32);
-		}
-		# TODO - this marks the "end of the block" noted above.
+#		open(my $fh,'<',$key_file) || die "Couldn't open key file $key_file: $!\n";
+#		my $size = -s $key_file;
+#		read($fh,my $buffer,$size);
+#		close $fh;
+#		if (length($buffer) != $size) {
+#			die "Couldn't read entire key file contents of $key_file.\n";
+#		}
+#
+#		$pass = substr(sha256($pass),0,32);
+#		if ($size == 32) {
+#			$pass .= $buffer;
+#		} elsif ($size == 64) {
+#			for (my $i = 0; $i < 64; $i += 2) {
+#				$pass .= chr(hex(substr($buffer,$i,2)));
+#			}
+#		} else {
+#			$pass .= substr(sha256($buffer),0,32);
+#		}
+#		# TODO - this marks the "end of the block" noted above.
 	}
 
 	return $pass;
@@ -5553,6 +5555,9 @@ this program would not have been practical for me to author.
                     Refactored color
                     Added alias: search=find
                     Changed defaults on list/show after found
+                    Only one default group in new database: Root
+                    Require File::KeePass version 2.03 and remove workaround
+                    New db after --kdb on a bad file (prevent error on 'ls')
 
 =head1 TODO ITEMS
 
